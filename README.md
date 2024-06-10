@@ -2,11 +2,11 @@
 
 A testing ground for any CloudFlare technologies.
 
-Note! None of the setup may persist. These are only experiments to see things work, and to learn using them!
+Note! None of the features may persist. These are only experiments to see things work, and to learn using them!
 
 ## Requirements
 
-Intended to be used with the `mp > `[`web+cf`](https://github.com/akauppi/mp/tree/main/web%2Bcf) VM. Map the `Lab` folder to `/home/ubuntu/Lab`.
+Intended to be used with the [`web-cf`](https://github.com/akauppi/mp/tree/main/web%2Bcf) Multipass VM. Map the `Lab` folder to `/home/ubuntu/Lab`.
 
 *Naturally, you can use native `node`, `wrangler` CLI and what-not if you wish.*
 
@@ -35,19 +35,32 @@ $ npm run dev
   ➜  press h + enter to show help
 ```
 
-The IP URL works always (Hint: Command-double click it).
+Here, the actual IP always works (hint: Command-double click it). 
 
->To make also `localhost:5173` work, you need to manually ssh it (Multipass [has no built-in port forwarding](https://github.com/canonical/multipass/issues/309), yet):
->
->```bash
->sudo ssh \
->	-i /var/root/Library/Application\ Support/multipassd/ssh-keys/id_rsa \
->	-L 5173:localhost:5173 \
->	ubuntu@192.168.64.102
->```
+>Hint: If you want also `localhost:5173` to work like the development happened indeed on the host (which it doesn't), run `./port-fwd.sh` (asks for `sudo` pw). <!--Multipass [has no built-in port forwarding](https://github.com/canonical/multipass/issues/309).-->
 
+## Deployment
+
+Deploying with Cloudflare Pages is simple. Just tie your GitHub account with the service, create a new Pages deployment.
+
+- Build command: `npm run build`
+- Root directory: `abc`
+
+In addition, ESLint 9 [requires Node.js >= 18.18.0](https://eslint.org/blog/2024/04/eslint-v9.0.0-released/#node.js-%3C-v18.18.0%2C-v19-no-longer-supported) so:
+
+- `Settings` > `Environment variables`
+
+      >![](.images/cf-node-version.png)
+      
+   - and same for `Preview`.
+
+Now, your pages get deployed to an URL like `https://lab-4hl.pages.dev` at each new push to `main` (where the build succeeds).
+
+
+
+<!--
 
 ## References
 
 - [tbd.](...)
-
+-->
