@@ -2,13 +2,17 @@
 
 A testing ground for any CloudFlare technologies.
 
-Note! None of the features may persist. These are only experiments to see things work, and to learn using them!
+>Note! 
+>
+>**None of the features may persist. These are only experiments to see how things work.**
+
+## Pre-reading
+
+- [Cloudflare Pages](https://developers.cloudflare.com/pages/) (Cloudflare docs)
 
 ## Requirements
 
 Intended to be used with the [`web-cf`](https://github.com/akauppi/mp/tree/main/web%2Bcf) Multipass VM. Map the `Lab` folder to `/home/ubuntu/Lab`.
-
-*Naturally, you can use native `node`, `wrangler` CLI and what-not if you wish.*
 
 <!--developed on:
 
@@ -35,9 +39,9 @@ $ npm run dev
   ➜  press h + enter to show help
 ```
 
-Here, the actual IP always works (hint: Command-double click it). 
+Here, the actual IP always works *(hint: Cmd-double click it on Mac)*.
 
->Hint: If you want also `localhost:5173` to work like the development happened indeed on the host (which it doesn't), run `./port-fwd.sh` (asks for `sudo` pw). <!--Multipass [has no built-in port forwarding](https://github.com/canonical/multipass/issues/309).-->
+>Hint: If you want also `localhost:5173` to work like the development happened indeed on the host (which it doesn't), run `./port-fwd.sh` (asks for `sudo` pw). [Multipass does not have built-in port forwarding](https://github.com/canonical/multipass/issues/309) - otherwise we'd use it, instead.
 
 ## Deployment
 
@@ -52,7 +56,7 @@ In addition, ESLint 9 [requires Node.js >= 18.18.0](https://eslint.org/blog/2024
 
       >![](.images/cf-node-version.png)
       
-   - and same for `Preview`.
+   - and same for `Preview`
 
 Now, your pages get deployed to an URL like `https://lab-4hl.pages.dev` at each new push to `main` (where the build succeeds).
 

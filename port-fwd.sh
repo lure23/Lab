@@ -41,12 +41,28 @@ read -rsp $'Press a key to continue...\n' -n1 KEY
 #
 _SSH_KEY=$(sudo sh -c "cat \"${_ID_RSA}\"")
 
-# We can now - for the rest of the host user session(!) 'ssh' to the VM without needing to provide the key.
+# Note: "-o 'StrictHostKeyChecking no'" does NOT take away file permissions check.
+#   <<
+#     Permissions 0660 for '/dev/stdin' are too open.
+#     ..
+#     This private key will be ignored.
+#   <<
 #
-ssh -ntt -i /dev/stdin -L ${PORT}:localhost:${PORT} ubuntu@${_MP_IP} <<< "${_SSH_KEY}" > /dev/null &
+##echo "${_SSH_KEY}" | ssh -ntt -i /dev/stdin -o "StrictHostKeyChecking no" -L ${PORT}:localhost:${PORT} ubuntu@${_MP_IP} &
+
+echo "${_SSH_KEY}" > .id_rsa
+chmod go-rw .id_rsa  # 660 -> 600
+ssh -ntt -i ./.id_rsa -L ${PORT}:localhost:${PORT} ubuntu@${_MP_IP} > /dev/null &
+rm .id_rsa
 _PS_TO_KILL=$!
+
+cleanup() {
+  #echo "Closing the port sharing."
+  kill ${_PS_TO_KILL}
+}
+trap cleanup EXIT
 
 echo -e "\nSharing port ${PORT}. KEEP THIS TERMINAL RUNNING.\n"
 read -rsp $'Press a key to stop the sharing.\n' -n1 KEY
 
-kill ${_PS_TO_KILL}
+# done
