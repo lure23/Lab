@@ -245,8 +245,7 @@ Now, your pages get deployed to an URL like `https://lab-4hl.pages.dev` at each 
 
 - Cloudflare docs
    - Workers > Testing > [Local development](https://developers.cloudflare.com/workers/testing/local-development/)
+- [Blazing fast development with full-stack frameworks and Cloudflare](https://blog.cloudflare.com/blazing-fast-development-with-full-stack-frameworks-and-cloudflare) (blog; Apr'24)
 
 - `[1]`: ["How to run SvelteKit & Cloudflare Page locally?"](https://stackoverflow.com/questions/74904528/how-to-run-sveltekit-cloudflare-page-locally) (StackOverflow)
-
-   - [ ] Track
 
