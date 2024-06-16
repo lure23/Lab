@@ -130,20 +130,23 @@ Press a key on the host, to close the port forward.
 ## Run
 
 ```
-$ wrangler pages dev .
+$ wrangler pages dev --ip 0.0.0.0 .
 
  ⛅️ wrangler 3.60.3
 -------------------
 
 ✨ Compiled Worker successfully
+[wrangler:inf] Ready on http://0.0.0.0:8788
+[wrangler:inf] - http://127.0.0.1:8788
+[wrangler:inf] - http://192.168.64.105:8788
 ⎔ Starting local server...
-[wrangler:inf] Ready on http://localhost:8788
-╭──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ [b] open a browser, [d] open Devtools, [c] clear console, [x] to exit                                                                                                                    │
-╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+╭─────────────────────────────────────────────────────────────────────────────╮
+│ [b] open a browser, [d] open Devtools, [c] clear console, [x] to exit
+╰─────────────────────────────────────────────────────────────────────────────╯
 ```
 
-You can already see the UI in `http://192.168.64.105:8788` <sub>replace with your MP VM IP</sub>.
+You can reach the development output at the provided `http://192.168.64.105:8788` URL (macOS: highlight the link and try `Cmd-double-click`).
+
 
 ### Getting `localhost:8788` (optional)
 
@@ -175,8 +178,48 @@ Warning: Permanently added '192.168.64.105' (ED25519) to the list of known hosts
 
 ### Exercise URLs
 
-<font color=orange>*tbd. List of URLs we might have something avaiable in...*</font>
+Below are some paths you can try out.
 
+|path|source|output|
+|---|---|---|
+|[`/`](http://localhost:8788/)|`/src/app.html`|<font color=red>DOES NOT WORK. Wrangler does not play ball with Vite `npm run dev`. ⛔️</font>|
+|[`/abc`](http://localhost:8788/abc)|`/functions/abc.js`|"`Hello from ABC!`"|
+|||
+
+<!-- tbd. more -->
+
+
+## 🚧🚧 Web content 🚧🚧🚧
+
+Ideally, Wrangler would be(come) integrated with Vite so that just running `wrangler pages dev` would keep hot-module-reloading Vite page creation happening, in the same `:8788` as the surrounding `/functions` and other Cloudflare specific things.
+
+This would be... easy for the developers.
+
+Until that is the case, we need to *separately run `npm run dev`*. This reflects the knowledge of the author. Please see `[1]` for more info and participate in the discussion!
+
+```
+$ npm run dev
+
+> abc@0.0.1 dev
+> vite dev
+
+4:55:52 PM [vite-plugin-svelte] You are using Svelte 5.0.0-next.153. Svelte 5 support is experimental, breaking changes can occur in any release until this notice is removed.
+work in progress:
+ - svelte-inspector is disabled until dev mode implements node to code mapping
+
+
+  VITE v5.2.13  ready in 12909 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: http://192.168.64.105:5173/
+  ➜  press h + enter to show help
+```
+
+You can use the `http://192.168.64.105:5173` URL directly. If you wish `localhost` to work, book (yet another) terminal and run `PORT=5173 ./port-forward.sh`!
+
+
+>Note: Cloudflare tools are way more tuned to deployment and production than development. This is also understandable - there are so many different ways of baking web sites "out there". The situation with SvelteKit + Cloudflare Pages DX can (only?) improve!!!
+		
 
 ## Deployment
 
@@ -202,3 +245,8 @@ Now, your pages get deployed to an URL like `https://lab-4hl.pages.dev` at each 
 
 - Cloudflare docs
    - Workers > Testing > [Local development](https://developers.cloudflare.com/workers/testing/local-development/)
+
+- `[1]`: ["How to run SvelteKit & Cloudflare Page locally?"](https://stackoverflow.com/questions/74904528/how-to-run-sveltekit-cloudflare-page-locally) (StackOverflow)
+
+   - [ ] Track
+

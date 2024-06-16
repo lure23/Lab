@@ -9,7 +9,7 @@ vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 
 # Cloudflare
-/.wrangler/state/
+/.wrangler/
 .dev.vars
 
 # tbd. When going to production, we might want to use 'package-lock.json' (in the version control!) to make sure
