@@ -2,12 +2,16 @@
 
 set -e
 
-# Forward the port 5173 of Multipass 'web-cf' VM to 'localhost:5173'
+# Forward a port of Multipass 'web-cf' VM to 'localhost'
 #
-# This is ONLY A MATTER OF CONVENIENCE. You can always point the browser to the full {IP}:5173.
+# This is ONLY A MATTER OF CONVENIENCE. You can always point the browser to the full {IP}:{PORT}.
 #
 # Usage:
-#   $ [MP_NAME=...] [PORT=...] port-fwd.sh
+#   $ [PORT=...] [MP_NAME=...] ./port-fwd.sh
+#
+# NOTE:
+#   This is very similar to 'login-fwd.sh' in 'mp' project. If you make big changes/improvements, please check both.
+#     -> https://github.com/akauppi/mp/blob/main/web%2Bcf/login-fwd.sh
 #
 # References:
 #   - "Specify private key in SSH as string" (SO) [1]
@@ -15,9 +19,11 @@ set -e
 #
 
 MP_NAME=${MP_NAME:-web-cf}
-PORT=5173   # SvelteKit default port
+PORT=${PORT:-8788}   # 'wrangler pages dev' default port
+  # ... other ports
 
 _ID_RSA=/var/root/Library/Application\ Support/multipassd/ssh-keys/id_rsa
+_TMP_KEY=.mp.key
 
 # Pick the IP
 _MP_IP=$(multipass info $MP_NAME | grep IPv4 | cut -w -f 2 )
@@ -41,24 +47,15 @@ read -rsp $'Press a key to continue...\n' -n1 KEY
 #
 _SSH_KEY=$(sudo sh -c "cat \"${_ID_RSA}\"")
 
-# Note: "-o 'StrictHostKeyChecking no'" does NOT take away file permissions check.
-#   <<
-#     Permissions 0660 for '/dev/stdin' are too open.
-#     ..
-#     This private key will be ignored.
-#   <<
-#
-##echo "${_SSH_KEY}" | ssh -ntt -i /dev/stdin -o "StrictHostKeyChecking no" -L ${PORT}:localhost:${PORT} ubuntu@${_MP_IP} &
+echo "${_SSH_KEY}" > ${_TMP_KEY}
+chmod 600 ${_TMP_KEY}
 
-echo "${_SSH_KEY}" > .id_rsa
-chmod go-rw .id_rsa  # 660 -> 600
-ssh -ntt -i ./.id_rsa -L ${PORT}:localhost:${PORT} ubuntu@${_MP_IP} > /dev/null &
-rm .id_rsa
+ssh -ntt -i ${_TMP_KEY} -o StrictHostKeyChecking=accept-new -L ${PORT}:localhost:${PORT} ubuntu@${_MP_IP} > /dev/null &
 _PS_TO_KILL=$!
 
 cleanup() {
-  #echo "Closing the port sharing."
   kill ${_PS_TO_KILL}
+  rm ${_TMP_KEY}
 }
 trap cleanup EXIT
 
