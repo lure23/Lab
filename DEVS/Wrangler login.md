@@ -1,13 +1,19 @@
-<!--
-Snippet that may be useful, **if** there is a case for `wrangler login`. Turns out, deployments didn't need it!
--->
+# Wrangler login
 
-In order to deploy, we finally need to attach to your Cloudflare account.
+In the main `README`, we noticed you can do all deployments without ever tying the `wrangler` CLI to a Cloudflare account. This is great.
 
-### `wrangler login`
+However, there may be times when you need/want to handle your project from the CLI. Here's how:
 
-First, pass the port 8976 from VM to the host (so your browser will find it).
+## Required
 
+- Cloudflare account
+- `web-cf` VM set up in Multipass
+
+
+## `wrangler login` in a VM
+
+Pass the port 8976 from VM to the host (so your browser will find it).
+ 
 ```
 $ {path-to-mp}/web+cf/login-fwd.sh 
 *
@@ -42,7 +48,7 @@ Attempting to login via OAuth...
 Visit this link to authenticate: https://dash.cloudflare.com/oauth2/auth?response_type=code&client_id=54d11594-...
 ```
 
-- Open the link (hint: to open in macOS default browser, `Cmd-double-click` it)
+- Open the link in the browser you use for Cloudflare access.
 
 - In the browser:
 
@@ -58,15 +64,19 @@ Visit this link to authenticate: https://dash.cloudflare.com/oauth2/auth?respons
 
 Press a key on the host, to close the port forward.
 
->Note: If the `wrangler login` times out, just try again!
 
----
+### Hints
 
->Hint: You can check your identity by:
->
->```
->$ wrangler whoami
->...
->```
+- If the `wrangler login` times out (it doesn't give that many minutes to decide on `Allow`), just try again!
 
----
+- Check your identity (and logged-in state) with:
+
+	```
+	$ wrangler whoami
+
+	 ⛅️ wrangler 3.61.0
+	-------------------
+
+	Getting User settings...
+	👋 You are logged in with an OAuth Token, associated with the email 	[...]
+	```
