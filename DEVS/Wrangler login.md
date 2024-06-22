@@ -1,3 +1,8 @@
+<!-- 
+Q: Do we need this, at all?  `mp` must have a similar section. Check.
+-->
+
+
 # Wrangler login
 
 In the main `README`, we noticed you can do all deployments without ever tying the `wrangler` CLI to a Cloudflare account. This is great.

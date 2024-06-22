@@ -1,8 +1,8 @@
-# Cloudflare Labs
+# Labs.pages
 
 A testing ground for [CloudFlare Pages](https://pages.cloudflare.com/). 
 
-We use [SvelteKit](https://kit.svelte.dev/) as the "full stack" framework.
+We use [SvelteKit](https://kit.svelte.dev/) as the web framework.
 
 >Note:
 >**None of the features may persist. These are only experiments to see how things work.**
@@ -17,9 +17,9 @@ We use [SvelteKit](https://kit.svelte.dev/) as the "full stack" framework.
 
 	Since April 2024, the approach of server-side functions with regard to Cloudflare Pages has changed: they are now rolled out in the "most natural way possible" for any supported web framework.
 	
-	This is GREAT NEWS!  It means you can develop *as normal* with SvelteKit, including `npm run dev` that **just works** - even with locally simulated backend services.
+	This is GREAT NEWS!  It means you can develop *as normal* with SvelteKit, including `npm run dev` - but get locally simulated backend services in the purchase!
 	
-	The new approach means that **`functions/` folder is now ignored**. You don't define back-end features through there; it's ignored. Some (quite a few!) places in the Cloudflare Pages still don't reflect this, and the reading / learning path may be confusing, because of this! Obviously, the docs will eventually pick up, but at the moment, this is how it is. As a whole, it's a very nice move that helps make development way simpler.
+>The new approach means that **`functions/`** folder is now ignored. You don't define back-end features through there. Some (quite a few!) places in the Cloudflare Pages still don't reflect this, and the reading / learning path may be confusing! Obviously, the docs will eventually pick up, but at the moment, this is how it is. As a whole, the transition is a very nice move that helps make development way simpler.
 
 Also [SvelteKit](https://kit.svelte.dev/) knowledge is expected. You can probably "wing it" (i.e. understand by reading) if you have experience from other full stack frameworks. Just that this repo is not about teaching SvelteKit.
 
@@ -28,16 +28,16 @@ Also [SvelteKit](https://kit.svelte.dev/) knowledge is expected. You can probabl
 
 Developed with:
 
-- the [`web-cf`](https://github.com/akauppi/mp/tree/main/web%2Bcf) Multipass VM
+- the [`web-cf`](https://github.com/akauppi/mp/tree/main/web%2Bcf) VM
 
 	- Create the VM before proceeding.	
-	- Mount this folder in it as `~/Lab`.
+	- Mount this folder in it as `~/Lab`
 
 	>Note: Using Multipass introduces some hurdles, with regard to file mapping and port forwarding. These are covered in the docs below.
 	>
 	>You can also follow this repo without a VM backend, but this exposes your main account more than the author is comfortable with. It's your call, though.
 
-You'll need a Cloudflare account (free is okay) if you wish to deploy the resulting pages.
+You won't need a Cloudflare account to try things out, locally. For deploying, that's of course .. a thing to have. 
 
 <!--developed on:
 
@@ -57,7 +57,7 @@ You'll need a Cloudflare account (free is okay) if you wish to deploy the result
 $ cd Lab/def
 ```
 
-We don't initially need a connection to Cloudflare. Check that you are not logged in:
+We don't need a connection to Cloudflare. Check that you are not logged in:
 
 ```
 $ wrangler logout
@@ -74,11 +74,9 @@ Install dependencies:
 $ npm install
 ```
 
-## Steps
+## Going to..
 
-We will try:
-
-- Local development (`npm run dev`) with hot-module-reload
+- Local development (`npm run dev`)
 - Local preview mode (`npm run preview`)
 - Deployment (`npm run deploy`)
 

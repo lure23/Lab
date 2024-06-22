@@ -1,5 +1,4 @@
-.DS_Store
-node_modules
+/node_modules/
 /build
 /.svelte-kit
 /package
@@ -9,6 +8,6 @@ node_modules
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 
-# wrangler files
-.wrangler
+# Cloudflare
+/.wrangler/
 .dev.vars
