@@ -148,8 +148,9 @@ Before we can use D1 (Cloudflare SQL database), we need to move the `.wrangler/s
 - Stop the `npm run dev` (ctrl-c)
 
    ```
-   $ mv .wranger/state ~/.wrangler/def/state   # or anywhere you like within the VM; perhaps /tmp?
-   $ (cd .wrangler && ln -s ~/.wrangler/def/state state)
+   $ install -d ~/.def.wrangler.state
+   $ rmdir .wrangler/state
+   $ (cd .wrangler && ln -s ~/.def.wrangler.state state)
    ```
 
 ---
@@ -157,7 +158,7 @@ Before we can use D1 (Cloudflare SQL database), we need to move the `.wrangler/s
 - Create a database by:
 
    ```
-   $ wrangler d1 execute lab-db --local --file schema.sql
+   $ wrangler d1 execute lab-db --local --file d1/schema.sql
 	```
 
 	If that doesn't give an error, you can proceed.
