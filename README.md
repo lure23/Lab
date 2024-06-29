@@ -69,7 +69,7 @@ In short, these are the same product. We need just a fraction of the abilities, 
 Commands below happen in the VM, unless otherwise stated.
 
 ```
-$ cd Lab.cfp-sk-gcip/def
+$ cd Lab.cfp-sk-gcip/app
 ```
 
 We don't need a connection to Cloudflare. Check that you are not logged in:
@@ -101,7 +101,7 @@ Below, we are going to discuss:
 ```
 $ npm run dev
 
-> def@0.0.1 dev
+> app@0.0.1 dev
 > vite dev
 
 
@@ -129,7 +129,7 @@ $ npm run dev
 
 ### Hot module reload
 
-Now, edit `def/src/routes/+page.svelte` in an IDE. Save the change.
+Now, edit `app/src/routes/+page.svelte` in an IDE. Save the change.
 
 Did you see the change?
 
@@ -233,11 +233,11 @@ $ npm run preview
 <details><summary>Full output</summary>
 
 ```
-> def@0.0.1 preview
+> app@0.0.1 preview
 > npm run build && wrangler pages dev
 
 
-> def@0.0.1 build
+> app@0.0.1 build
 > vite build
 
 vite v5.3.1 building SSR bundle for production...
@@ -323,7 +323,7 @@ A preview allows you to interactively check that building didn't break anything.
 Deploying with Cloudflare Pages is simple. Just tie your GitHub account with the service, create a new Pages deployment.
 
 - Build command: `npm run build`
-- Root directory: `def`
+- Root directory: `app`
 
 In addition, ESLint 9 [requires Node.js >= 18.18.0](https://eslint.org/blog/2024/04/eslint-v9.0.0-released/#node.js-%3C-v18.18.0%2C-v19-no-longer-supported) so:
 
@@ -342,10 +342,10 @@ Now, your pages get deployed to an URL like `https://lab-4hl.pages.dev` at each 
 
 ## Some background (optional)
 
-The `def` folder has originally been created by:
+The `app` folder has originally been created by:
 
 ```
-$ npm create cloudflare@latest def -- --framework=svelte
+$ npm create cloudflare@latest app -- --framework=svelte
 ```
 
 >Note: Cloudflare uses `svelte` and SvelteKit interchangeably. The above means SvelteKit (the full stack framework), not only Svelte (the browser-side framework).
@@ -354,7 +354,7 @@ The creation ends with:
 
 ```
 [...]
-│ Navigate to the new directory cd def
+│ Navigate to the new directory cd app
 │ Run the development server **npm run dev**
 │ Preview your application **npm run preview**
 │ Deploy your application **npm run deploy**
