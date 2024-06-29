@@ -1,13 +1,21 @@
-# Labs.pages
+# Labs.cfp-sk-gcip
 
 A testing ground for [CloudFlare Pages](https://pages.cloudflare.com/). 
 
-We use [SvelteKit](https://kit.svelte.dev/) as the web framework.
 
->Note:
->**None of the features may persist. These are only experiments to see how things work.**
+![](.images/tools-triad.png)
+
+Web development can be seen as a triangle of tools and services.
+
+- Framework defines the application (both web client and back end). We use [SvelteKit](https://kit.svelte.dev).
+- Deployment takes care of keeping the application available, and scaling up/down to keep costs at bay. We choose [Cloudflare Pages](https://www.cloudflare.com).
+- Identity management helps authenticate our users, to manage them, and to grant them rights. Our initial choice here is [Google Cloud Identity Platform](https://cloud.google.com/security/products/identity-platform)
+
+
 
 ## Pre-reading
+
+### Cloudflare
 
 - [Cloudflare Pages](https://developers.cloudflare.com/pages/) (Cloudflare docs)
 
@@ -21,23 +29,30 @@ We use [SvelteKit](https://kit.svelte.dev/) as the web framework.
 	
 >The new approach means that **`functions/`** folder is now ignored. You don't define back-end features through there. Some (quite a few!) places in the Cloudflare Pages still don't reflect this, and the reading / learning path may be confusing! Obviously, the docs will eventually pick up, but at the moment, this is how it is. As a whole, the transition is a very nice move that helps make development way simpler.
 
+### SvelteKit
+
 Also [SvelteKit](https://kit.svelte.dev/) knowledge is expected. You can probably "wing it" (i.e. understand by reading) if you have experience from other full stack frameworks. Just that this repo is not about teaching SvelteKit.
+
+### Google Cloud Identity Platform
+
+This one is a bit of a bipedal creation. You can do *all* access using [Google Cloud Identity Platform](https://cloud.google.com/security/products/identity-platform) console - but the best documentation is on the side of [Firebase Admin Auth](https://firebase.google.com/docs/auth/admin).
+
+In short, these are the same product. We need just a fraction of the abilities, and anything you need to set up is described below.
+
+>Obviously, other identity providers exist as well. Just happens so that the author was already familiar with Google and cough-Firebase-/cough.
 
 
 ## Requirements
 
-Developed with:
+- A Cloudflare account
+- A Google Cloud account
+- a [`web-cf`](https://github.com/akauppi/mp/tree/main/web%2Bcf) VM
 
-- the [`web-cf`](https://github.com/akauppi/mp/tree/main/web%2Bcf) VM
-
-	- Create the VM before proceeding.	
-	- Mount this folder in it as `~/Lab`
+	You can also run the instructions at your host, at your own risk. Why... would you do that? :)
+	
+	- this folder mounted as `~/Lab.cfp-sk-gcip`
 
 	>Note: Using Multipass introduces some hurdles, with regard to file mapping and port forwarding. These are covered in the docs below.
-	>
-	>You can also follow this repo without a VM backend, but this exposes your main account more than the author is comfortable with. It's your call, though.
-
-You won't need a Cloudflare account to try things out, locally. For deploying, that's of course .. a thing to have. 
 
 <!--developed on:
 
@@ -51,10 +66,10 @@ You won't need a Cloudflare account to try things out, locally. For deploying, t
 <!-- DEV NOTE: When doing these steps, make sure `wrangler` is not logged in: `$ wrangler logout; wrangler whoami`
 -->
 
-*Commands below happen in the VM, unless otherwise stated.*
+Commands below happen in the VM, unless otherwise stated.
 
 ```
-$ cd Lab/def
+$ cd Lab.cfp-sk-gcip/def
 ```
 
 We don't need a connection to Cloudflare. Check that you are not logged in:
@@ -62,7 +77,7 @@ We don't need a connection to Cloudflare. Check that you are not logged in:
 ```
 $ wrangler logout
 
- ⛅️ wrangler 3.61.0
+ ⛅️ wrangler 3.62.0
 -------------------
 
 Not logged in, exiting...
@@ -74,11 +89,12 @@ Install dependencies:
 $ npm install
 ```
 
-## Going to..
+Below, we are going to discuss:
 
 - Local development (`npm run dev`)
-- Local preview mode (`npm run preview`)
+- Local preview (`npm run preview`)
 - Deployment (`npm run deploy`)
+
 
 ## Local development
 
@@ -98,14 +114,18 @@ $ npm run dev
 
 - Open the said `http://192.168.64.105:5173` URL. Do you see a web page?
 
-	>Note: The direct VM IP works as such. If you want to use the `localhost` URL,
-	>you'll need to forward it from the VM to your host:
-	>
-	>```
-	>$ PORT=5173 ./port-fwd.sh
-	>```
-	>
-	>Keep that terminal running.
+	>Hint: On macOS Terminal, you can Cmd-double-clicking on such a URL. Opens in default browser.
+	
+	The direct VM IP works as such, but if you want also the `localhost` URL
+	to be usable, you'll need to forward it from the VM to your host. The `mp` repo has a helper for this.
+	
+	```
+	$ PORT=5173 {path-to-mp}/tools/port-fwd.sh
+	```
+
+	Unfortunately, Multipass doesn't support native port forwards.
+
+>![](.images/welcome.png)
 
 ### Hot module reload
 
@@ -119,13 +139,29 @@ Hot module reload means that you should not need to refresh the browser. Changes
 
 ### Server-side functions
 
-Keep the service running. Open `http://192.168.64.105:5173/abc`
+Keep the service running. Open [`http://192.168.64.105:5173/abc`](http://192.168.64.105:5173/abc).
 
 >This should show ![](.images/abc_hello.png), defined in `src/routes/abc/+server.js`.
 
-- Edit the said file, changing the text. 
+Edit the said file, changing the text. 
 
-	Now you need to refresh the browser, since the text is not static web content but created anew for each request hitting that server-side function. Do you see the change?
+Now you need to refresh the browser, since the text is not static web content but created anew for each request. Do you see the change?
+
+### Authentication
+
+Let's bring in authentication to the mix. 
+
+For this, you'll need to [go through some hoops](...) to set up a project in the Google Cloud Console.
+
+---
+*a few minutes later.. 🌘🐌*
+
+---
+
+Back? Great!
+
+You now have an `API Key` and `AuthDomain` that can be fed to the `firebase-admin` library.
+
 
 
 <!-- tbd.
@@ -345,4 +381,6 @@ The suggested commands are the normal SvelteKit development commands. The way Cl
 - [Blazing fast development with full-stack frameworks and Cloudflare](https://blog.cloudflare.com/blazing-fast-development-with-full-stack-frameworks-and-cloudflare) (blog; Apr'24)
 
 - ["How to run SvelteKit & Cloudflare Page locally?"](https://stackoverflow.com/questions/74904528/how-to-run-sveltekit-cloudflare-page-locally) (StackOverflow) `[1]`
+
+- [Introduction to the Admin Auth API](https://firebase.google.com/docs/auth/admin) (Firebase documentation)
 
